@@ -33,11 +33,77 @@ const wordSets = [
         requiredCount: 3
     },
     {
+        words: ['ténèbres', 'obscurité', 'goth', 'susumimi', 'Alyn'],
+        achievement: '☦️ Alynzouz ☠️',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
         words: ['mode', 'vêtements', 'style', 'fashion', 'fashionista'],
         achievement: 'fashionista',
         threshold: 0.8,
         requiredCount: 2
     },
+    {
+        words: ['chat', 'miaou', 'félin', 'minou', 'ronron'],
+        achievement: '🐾 Ami des chats 🐾',
+        threshold: 0.8,
+        requiredCount: 2
+    },
+    {
+        words: ['chien', 'ouaf', 'canin', 'toutou', 'doggo'],
+        achievement: '🐶 Ami des chiens 🐶',
+        threshold: 0.8,
+        requiredCount: 2
+    },
+    {
+        words: ['pizza', 'pâtes', 'lasagne', 'italien', 'mozzarella'],
+        achievement: '🍕 Gourmand italien 🍝',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
+        words: ['livre', 'lecture', 'roman', 'bibliothèque', 'histoire'],
+        achievement: '📚 Rat de bibliothèque 📖',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
+        words: ['jeu', 'gaming', 'console', 'pc', 'stream'],
+        achievement: '🎮 Gamer 🎮',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
+        words: ['soleil', 'plage', 'vacances', 'été', 'sable'],
+        achievement: '🌞 Enfant de l’été 🌴',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
+        words: ['neige', 'hiver', 'froid', 'givre', 'glace'],
+        achievement: '❄️ Enfant de l’hiver ⛄',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
+        words: ['musique', 'chanson', 'concert', 'guitare', 'piano'],
+        achievement: '🎵 Mélomane 🎶',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
+        words: ['art', 'peinture', 'dessin', 'sculpture', 'création'],
+        achievement: '🎨 Artiste 🎭',
+        threshold: 0.8,
+        requiredCount: 3
+    },
+    {
+        words: ['science', 'espace', 'laboratoire', 'chimie', 'physique'],
+        achievement: '🔬 Scientifique 🚀',
+        threshold: 0.8,
+        requiredCount: 3
+    }
     // Add more word sets here as needed
 ];
 
@@ -73,7 +139,13 @@ const titles = [
     "aspirateur à pikmin",
     "pikachu surpris",
     "oo ii cat",
-    "base virale mise à jour"
+    "base virale mise à jour",
+    "millefeuille",
+    "gay icon",
+    "gothic queen",
+    "queen of the night",
+    "queen of the day",
+    "Cottagecore lesbian"
 ];
 
 const items = [
@@ -109,6 +181,9 @@ function checkAchievements(user, message, userActivityData, client, channel) {
     // Check for word set achievements
     checkWordSetAchievements(user, message, userActivityData, client, channel);
 
+    // Check for "oiseau de nuit" achievement
+    checkNightOwlAchievement(user, userActivityData, client, channel);
+
     // Add more achievement checks here
 }
 
@@ -139,6 +214,14 @@ function checkWordSetAchievements(user, message, userActivityData, client, chann
             }
         });
     });
+}
+
+function checkNightOwlAchievement(user, userActivityData, client, channel) {
+    const currentHour = new Date().getHours();
+    if (currentHour >= 23 && !userActivityData.achievements.includes('oiseau de nuit')) {
+        userActivityData.achievements.push('oiseau de nuit');
+        client.say(channel, `${user} a gagné le badge "oiseau de nuit" !`);
+    }
 }
 
 module.exports = {
