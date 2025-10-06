@@ -106,11 +106,13 @@ client.on('message', (channel, tags, message, self) => {
     if (message.toLowerCase() === '!achievements' || message.toLowerCase() === '!badges') {
         let achievements = userActivity[user].achievements;
         let achievementsList = achievements.join(', ');
+        let title = userActivity[user].title ? ` | Titre : ${userActivity[user].title}` : '';
+        let item = userActivity[user].item ? ` | Objet : ${userActivity[user].item}` : '';
 
-        if (achievements.length === 0) {
+        if (achievements.length === 0 && !userActivity[user].title && !userActivity[user].item) {
             client.say(channel, `${user}, vous n'avez pas encore de réalisations.`);
         } else {
-            client.say(channel, `${user}, vos réalisations: ${achievementsList}`);
+            client.say(channel, `${user}, vos réalisations: ${achievementsList}${title}${item}`);
         }
     }
 
