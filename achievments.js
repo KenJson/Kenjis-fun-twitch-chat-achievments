@@ -151,13 +151,15 @@ const titles = [
 const items = [
     "Épée", "Bouclier", "Amulette", "Anneau", "Casque", "Armure", "Bottes", "Gants", "Cape", "Bâton", 
     "fourchette", "cuillère à miel", "ciseaux à raisins", "pelle à tarte", "brosse à dents", "tire-bouchon", 
-    "couteau à beurre", "cuillère à café", "fourchette à soupe"
+    "couteau à beurre", "cuillère à café", "fourchette à soupe", "marteau", "clé à molette", "tournevis", 
+    "pince", "serpe", "hache", "lance", "arc", "flèche", "bouclier rond", "bouclier carré", "bouclier triangulaire"
 ];
 
 const natures = [
-    "obsidienne", "honte", "feu", "glace", "vent", "terre", "éclair", "ombre", "lumière", "eau", "JOIE",
-    "espoir", "slime", "poussière", "sable", "pierre", "mousse", "fumée", "miel", "caramel", "chocolat", "papier",
-    "vorpal", "psychique", "résonnant", "magnétique", "éthéré"
+    "d'obsidienne", "de honte", "de feu", "de glace", "de vent", "de terre", "d'éclair", "d'ombre", "de lumière", "d'eau", "de JOIE",
+    "d'espoir", "de slime", "de poussière", "de sable", "de pierre", "de mousse", "de fumée", "de miel", "de caramel", "de chocolat", "de papier",
+    "vorpale", "psychique", "de résonnance", "magnétique", "d'éther", "du néant", "de chaos", "de rêve", "de cauchemar", "de pixel", "de glitch", 
+    "de code", "quantique", "temporel", "dimensionnel"
 ];
 
 // Function to check achievements

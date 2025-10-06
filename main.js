@@ -27,7 +27,7 @@ function getRandomTitle() {
 function getRandomItem() {
     const item = items[Math.floor(Math.random() * items.length)];
     const nature = natures[Math.floor(Math.random() * natures.length)];
-    return `${item} de ${nature}`;
+    return `${item} ${nature}`;
 }
 
 // Twitch chat client configuration
@@ -58,8 +58,8 @@ client.on('message', (channel, tags, message, self) => {
             messages: [],
             achievements: [],
             wordUsage: {},
-            title: null,
-            item: null
+            titles: [],
+            items: []
         };
     }
     userActivity[user].messages.push({ content: message, time: currentTime });
