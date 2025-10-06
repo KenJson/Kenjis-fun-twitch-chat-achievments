@@ -19,15 +19,17 @@ function saveUserActivity() {
 }
 
 // Function to get a random title from the titles list
-function getRandomTitle() {
-    return titles[Math.floor(Math.random() * titles.length)];
+function getUniqueRandomTitle(user) {
+    const availableTitles = titles.filter(t => !userActivity[user].titles.includes(t));
+    if (availableTitles.length === 0) return null;
+    return availableTitles[Math.floor(Math.random() * availableTitles.length)];
 }
 
-// Function to get a random item composed of one element from items and one from natures
-function getRandomItem() {
-    const item = items[Math.floor(Math.random() * items.length)];
-    const nature = natures[Math.floor(Math.random() * natures.length)];
-    return `${item} ${nature}`;
+function getUniqueRandomItem(user) {
+    const allPossibleItems = items.flatMap(item => natures.map(nature => `${item} de ${nature}`));
+    const availableItems = allPossibleItems.filter(i => !userActivity[user].items.includes(i));
+    if (availableItems.length === 0) return null;
+    return availableItems[Math.floor(Math.random() * availableItems.length)];
 }
 
 // Twitch chat client configuration
@@ -54,30 +56,37 @@ client.on('message', (channel, tags, message, self) => {
     // Track user activity
     if (!userActivity[user]) {
         userActivity[user] = {
-            firstMessageTime: currentTime,
-            messages: [],
             achievements: [],
             wordUsage: {},
             titles: [],
             items: []
         };
     }
-    userActivity[user].messages.push({ content: message, time: currentTime });
+    //This was to log messages in useractivity, but it's obsolete now, since we don't allow duplicate achievements
+   // userActivity[user].messages.push({ content: message, time: currentTime });
 
     // Check for achievements
     checkAchievements(user, message, userActivity[user], client, channel);
 
     // Assign title based on the number of achievements
     const achievementsCount = userActivity[user].achievements.length;
-    if (achievementsCount >= 5 && !userActivity[user].title) {
-        userActivity[user].title = getRandomTitle();
-        client.say(channel, `${user} a reçu le titre "${userActivity[user].title}" pour avoir obtenu 5 réalisations !`);
+    
+    // Award unique title
+    if (achievementsCount >= 5) {
+        const newTitle = getUniqueRandomTitle(user);
+        if (newTitle) {
+            userActivity[user].titles.push(newTitle);
+            client.say(channel, `${user} a reçu le titre "${newTitle}" pour avoir obtenu 5 réalisations !`);
+        }
     }
-
-    // Award item based on the number of achievements
-    if (achievementsCount >= 10 && !userActivity[user].item) {
-        userActivity[user].item = getRandomItem();
-        client.say(channel, `${user} a reçu l'objet "${userActivity[user].item}" pour avoir obtenu 10 réalisations !`);
+    
+    // Award unique item
+    if (achievementsCount >= 10) {
+        const newItem = getUniqueRandomItem(user);
+        if (newItem) {
+            userActivity[user].items.push(newItem);
+            client.say(channel, `${user} a reçu l'objet "${newItem}" pour avoir obtenu 10 réalisations !`);
+        }
     }
 
     // Check if the user is a subscriber and award achievements based on subscription duration
@@ -104,15 +113,15 @@ client.on('message', (channel, tags, message, self) => {
 
     // Display achievements command
     if (message.toLowerCase() === '!achievements' || message.toLowerCase() === '!badges') {
-        let achievements = userActivity[user].achievements;
+               let achievements = userActivity[user].achievements;
         let achievementsList = achievements.join(', ');
-        let title = userActivity[user].title ? ` | Titre : ${userActivity[user].title}` : '';
-        let item = userActivity[user].item ? ` | Objet : ${userActivity[user].item}` : '';
-
-        if (achievements.length === 0 && !userActivity[user].title && !userActivity[user].item) {
+        let titles = userActivity[user].titles.length ? ` | Titres : ${userActivity[user].titles.join(', ')}` : '';
+        let items = userActivity[user].items.length ? ` | Objets : ${userActivity[user].items.join(', ')}` : '';
+        
+        if (achievements.length === 0 && userActivity[user].titles.length === 0 && userActivity[user].items.length === 0) {
             client.say(channel, `${user}, vous n'avez pas encore de réalisations.`);
         } else {
-            client.say(channel, `${user}, vos réalisations: ${achievementsList}${title}${item}`);
+            client.say(channel, `${user}, vos réalisations: ${achievementsList}${titles}${items}`);
         }
     }
 
